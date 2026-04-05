@@ -1,0 +1,358 @@
+@import "tailwindcss";
+
+/* =========================================================
+   3D Spatial Knowledge Graph — Design System
+   Tailwind CSS v4 (CSS-first configuration)
+   ========================================================= */
+
+@theme {
+  /* ── Color Palette: Deep Space ── */
+  --color-void: #030712;
+  --color-abyss: #0a0f1e;
+  --color-deep: #111827;
+  --color-surface: #1a2340;
+  --color-surface-light: #243056;
+
+  --color-cyan-glow: #06d6f2;
+  --color-cyan-dim: #0891b2;
+  --color-violet-glow: #a855f7;
+  --color-violet-dim: #7c3aed;
+  --color-rose-glow: #f43f5e;
+  --color-amber-glow: #f59e0b;
+  --color-emerald-glow: #10b981;
+
+  --color-text-primary: #f0f4ff;
+  --color-text-secondary: #94a3b8;
+  --color-text-muted: #475569;
+
+  /* ── Glass Tokens ── */
+  --glass-bg: rgba(15, 23, 42, 0.6);
+  --glass-bg-solid: rgba(15, 23, 42, 0.85);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-border-hover: rgba(255, 255, 255, 0.15);
+  --glass-blur: 20px;
+  --glass-blur-heavy: 40px;
+
+  /* ── Spacing & Radius ── */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+
+  /* ── Shadows ── */
+  --shadow-glow-cyan: 0 0 20px rgba(6, 214, 242, 0.15), 0 0 60px rgba(6, 214, 242, 0.05);
+  --shadow-glow-violet: 0 0 20px rgba(168, 85, 247, 0.15), 0 0 60px rgba(168, 85, 247, 0.05);
+  --shadow-glow-rose: 0 0 20px rgba(244, 63, 94, 0.15), 0 0 60px rgba(244, 63, 94, 0.05);
+  --shadow-elevated: 0 8px 32px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(0, 0, 0, 0.3);
+
+  /* ── Typography ── */
+  --font-sans: "Inter", "SF Pro Display", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", ui-monospace, monospace;
+
+  /* ── Animation Timing ── */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-smooth: cubic-bezier(0.65, 0, 0.35, 1);
+  --duration-fast: 150ms;
+  --duration-normal: 300ms;
+  --duration-slow: 600ms;
+}
+
+/* =========================================================
+   Base Styles
+   ========================================================= */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  color-scheme: dark;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--color-void);
+  color: var(--color-text-primary);
+  min-height: 100dvh;
+  overflow: hidden;
+}
+
+/* =========================================================
+   Glassmorphism Utilities
+   ========================================================= */
+
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+}
+
+.glass-solid {
+  background: var(--glass-bg-solid);
+  backdrop-filter: blur(var(--glass-blur-heavy));
+  -webkit-backdrop-filter: blur(var(--glass-blur-heavy));
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+}
+
+.glass-hover {
+  transition: border-color var(--duration-normal) var(--ease-out-expo),
+              box-shadow var(--duration-normal) var(--ease-out-expo);
+}
+
+.glass-hover:hover {
+  border-color: var(--glass-border-hover);
+  box-shadow: var(--shadow-elevated);
+}
+
+/* =========================================================
+   Glow Effects
+   ========================================================= */
+
+.glow-cyan {
+  box-shadow: var(--shadow-glow-cyan);
+}
+
+.glow-violet {
+  box-shadow: var(--shadow-glow-violet);
+}
+
+.glow-rose {
+  box-shadow: var(--shadow-glow-rose);
+}
+
+/* Animated border glow for inputs */
+.glow-border {
+  position: relative;
+  overflow: hidden;
+}
+
+.glow-border::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  background: conic-gradient(
+    from var(--glow-angle, 0deg),
+    transparent 0%,
+    var(--color-cyan-glow) 10%,
+    var(--color-violet-glow) 20%,
+    transparent 30%
+  );
+  z-index: -1;
+  opacity: 0;
+  transition: opacity var(--duration-normal) var(--ease-out-expo);
+  animation: rotate-glow 4s linear infinite;
+}
+
+.glow-border:focus-within::before {
+  opacity: 1;
+}
+
+@property --glow-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes rotate-glow {
+  to {
+    --glow-angle: 360deg;
+  }
+}
+
+/* =========================================================
+   Micro-Animations
+   ========================================================= */
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 0.6;
+    filter: blur(12px);
+  }
+  50% {
+    opacity: 1;
+    filter: blur(16px);
+  }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes spin-slow {
+  to { transform: rotate(360deg); }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.animate-shimmer {
+  background: linear-gradient(
+    90deg,
+    transparent 25%,
+    rgba(255, 255, 255, 0.05) 50%,
+    transparent 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up var(--duration-slow) var(--ease-out-expo) forwards;
+}
+
+.animate-fade-in {
+  animation: fade-in var(--duration-normal) var(--ease-out-expo) forwards;
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right var(--duration-slow) var(--ease-out-expo) forwards;
+}
+
+/* =========================================================
+   Scrollbar Styling
+   ========================================================= */
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* =========================================================
+   Selection Highlighting
+   ========================================================= */
+
+::selection {
+  background: rgba(6, 214, 242, 0.3);
+  color: var(--color-text-primary);
+}
+
+/* =========================================================
+   R3F Canvas Container
+   ========================================================= */
+
+.canvas-container {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+}
+
+.canvas-container canvas {
+  outline: none;
+}
+
+/* =========================================================
+   Floating UI Micro-Window (JIT)
+   ========================================================= */
+
+.jit-window {
+  background: var(--glass-bg-solid);
+  backdrop-filter: blur(var(--glass-blur-heavy));
+  -webkit-backdrop-filter: blur(var(--glass-blur-heavy));
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-elevated), var(--shadow-glow-cyan);
+  max-width: 380px;
+  padding: 16px 20px;
+  animation: fade-in-up var(--duration-normal) var(--ease-out-expo) forwards;
+}
+
+.jit-window .jit-term {
+  display: inline-block;
+  padding: 2px 10px;
+  margin: 2px 4px;
+  background: rgba(6, 214, 242, 0.1);
+  border: 1px solid rgba(6, 214, 242, 0.2);
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  color: var(--color-cyan-glow);
+  font-weight: 500;
+}
+
+/* =========================================================
+   Loading Skeleton
+   ========================================================= */
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--color-surface) 25%,
+    var(--color-surface-light) 50%,
+    var(--color-surface) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: var(--radius-sm);
+}
+
+/* =========================================================
+   Category Colors (for 3D node theming)
+   ========================================================= */
+
+.category-technology { --node-color: var(--color-cyan-glow); }
+.category-science { --node-color: var(--color-violet-glow); }
+.category-history { --node-color: var(--color-amber-glow); }
+.category-business { --node-color: var(--color-emerald-glow); }
+.category-health { --node-color: var(--color-rose-glow); }
+.category-philosophy { --node-color: var(--color-violet-dim); }
+.category-general { --node-color: var(--color-cyan-dim); }

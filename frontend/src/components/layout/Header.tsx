@@ -92,9 +92,23 @@ export const Header: React.FC<HeaderProps> = ({
               fontSize: "0.65rem",
               color: "var(--color-text-muted)",
               letterSpacing: "0.02em",
+              display: "flex",
+              alignItems: "center",
+              gap: "6px",
             }}
           >
             3D Spatial Knowledge Graph
+            <span
+              style={{
+                width: "3px",
+                height: "3px",
+                borderRadius: "50%",
+                background: "var(--color-text-muted)",
+                opacity: 0.5,
+                flexShrink: 0,
+              }}
+            />
+            <span style={{ opacity: 0.7 }}>made by Aniruddh D.P</span>
           </p>
         </div>
       </div>
